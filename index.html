@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Command Block System Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #444;
+        }
+        pre {
+            background: #f4f4f4;
+            border-left: 3px solid #ddd;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        code {
+            color: #d6336c;
+        }
+        .chain-link {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #eaf7ff;
+            border: 1px solid #cce7ff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minecraft Command Block System Documentation</h1>
+        <p>This documentation describes the command block chain system for handling weapon attacks and cooldown mechanics in Minecraft 1.20.1. Follow the setup step-by-step to implement the system in your world.</p>
+
+        <h2>Command Blocks Overview</h2>
+        <p>Each command block in the chain performs a specific task. Below are the commands and their configurations:</p>
+
+        <h3>Command Block Chain</h3>
+        <ol>
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 1:</strong>
+                    <pre>
+/scoreboard players tag @a[scores={useAttack=1..}] add attack1 {SelectedItem:{tag:{WeaponType:1b}}}
+                    </pre>
+                    <p><strong>Type:</strong> Repeat, Always Active</p>
+                    <p><strong>Function:</strong> Tags players who use the <code>Carrot on a Stick</code> with the appropriate NBT data.</p>
+                </div>
+            </li>
+
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 2:</strong>
+                    <pre>
+/scoreboard players set @a[scores={useAttack=1..}] useAttack 0
+                    </pre>
+                    <p><strong>Type:</strong> Chain, Always Active</p>
+                    <p><strong>Function:</strong> Resets the <code>useAttack</code> scoreboard.</p>
+                </div>
+            </li>
+
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 3:</strong>
+                    <pre>
+/item replace entity @a[tag=attack1] hotbar.0 with minecraft:diamond_hoe{Unbreakable:1b, CoolDown:5b}
+                    </pre>
+                    <p><strong>Type:</strong> Chain, Always Active</p>
+                    <p><strong>Function:</strong> Replaces the player's <code>Carrot on a Stick</code> with a <code>Diamond Hoe</code> to enforce cooldown.</p>
+                </div>
+            </li>
+
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 4:</strong>
+                    <pre>
+/execute as @a[tag=attack1] run summon minecraft:lightning_bolt ~ ~ ~
+                    </pre>
+                    <p><strong>Type:</strong> Chain, Always Active</p>
+                    <p><strong>Function:</strong> Executes the attack command (e.g., summoning a lightning bolt).</p>
+                </div>
+            </li>
+
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 5:</strong>
+                    <pre>
+/scoreboard players tag @a[tag=attack1] remove attack1
+                    </pre>
+                    <p><strong>Type:</strong> Chain, Always Active</p>
+                    <p><strong>Function:</strong> Removes the <code>attack1</code> tag from the player.</p>
+                </div>
+            </li>
+
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 6:</strong>
+                    <pre>
+/scoreboard players add @a CoolDown 5
+                    </pre>
+                    <p><strong>Type:</strong> Repeat, Always Active</p>
+                    <p><strong>Function:</strong> Adds a cooldown score to all players.</p>
+                </div>
+            </li>
+
+            <li>
+                <div class="chain-link">
+                    <strong>Command Block 7:</strong>
+                    <pre>
+/item replace entity @a[scores={CoolDown=100..}] hotbar.0 with minecraft:carrot_on_a_stick{Unbreakable:1b, WeaponType:1b}
+/scoreboard players set @a[scores={CoolDown=100..}] CoolDown 0
+                    </pre>
+                    <p><strong>Type:</strong> Chain, Always Active</p>
+                    <p><strong>Function:</strong> Resets the cooldown and replaces the player's weapon back to the <code>Carrot on a Stick</code>.</p>
+                </div>
+            </li>
+        </ol>
+
+        <h2>Implementation Steps</h2>
+        <ol>
+            <li>Create the necessary scoreboards using the following commands:
+                <pre>
+/scoreboard objectives add useAttack minecraft.used:minecraft.carrot_on_a_stick
+/scoreboard objectives add CoolDown dummy
+                </pre>
+            </li>
+            <li>Set up the command blocks in the exact order mentioned above, ensuring the appropriate block types and activation settings.</li>
+            <li>Test the system by giving yourself a <code>Carrot on a Stick</code> with the following command:
+                <pre>
+/give @p minecraft:carrot_on_a_stick{Unbreakable:1b,WeaponType:1b}
+                </pre>
+            </li>
+            <li>Right-click the item to trigger the commands and observe the effects.</li>
+        </ol>
+
+        <h2>Troubleshooting</h2>
+        <p>If something doesn't work as expected:</p>
+        <ul>
+            <li>Ensure all command blocks are configured as <strong>Always Active</strong> where required.</li>
+            <li>Verify the order of the chain and that each block links correctly to the next.</li>
+            <li>Check the scoreboard values with:
+                <pre>
+/scoreboard players list @p
+                </pre>
+            </li>
+        </ul>
+
+        <h2>Contact</h2>
+        <p>For further assistance, reach out to the Minecraft community or consult the official Minecraft Wiki.</p>
+    </div>
+</body>
+</html>
