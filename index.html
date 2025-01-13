@@ -48,6 +48,23 @@
         <h1>Minecraft Command Block System Documentation</h1>
         <p>This documentation describes the command block chain system for handling weapon attacks and cooldown mechanics in Minecraft 1.20.1. Follow the setup step-by-step to implement the system in your world.</p>
 
+        <h2>Implementation Steps</h2>
+        <ol>
+            <li>Create the necessary scoreboards using the following commands:
+                <pre>
+/scoreboard objectives add useAttack minecraft.used:minecraft.carrot_on_a_stick
+/scoreboard objectives add CoolDown dummy
+                </pre>
+            </li>
+            <li>Set up the command blocks in the exact order mentioned above, ensuring the appropriate block types and activation settings.</li>
+            <li>Test the system by giving yourself a <code>Carrot on a Stick</code> with the following command:
+                <pre>
+/give @p minecraft:carrot_on_a_stick{Unbreakable:1b,WeaponType:1b}
+                </pre>
+            </li>
+            <li>Right-click the item to trigger the commands and observe the effects.</li>
+        </ol>
+
         <h2>Command Blocks Overview</h2>
         <p>Each command block in the chain performs a specific task. Below are the commands and their configurations:</p>
 
@@ -132,22 +149,6 @@
             </li>
         </ol>
 
-        <h2>Implementation Steps</h2>
-        <ol>
-            <li>Create the necessary scoreboards using the following commands:
-                <pre>
-/scoreboard objectives add useAttack minecraft.used:minecraft.carrot_on_a_stick
-/scoreboard objectives add CoolDown dummy
-                </pre>
-            </li>
-            <li>Set up the command blocks in the exact order mentioned above, ensuring the appropriate block types and activation settings.</li>
-            <li>Test the system by giving yourself a <code>Carrot on a Stick</code> with the following command:
-                <pre>
-/give @p minecraft:carrot_on_a_stick{Unbreakable:1b,WeaponType:1b}
-                </pre>
-            </li>
-            <li>Right-click the item to trigger the commands and observe the effects.</li>
-        </ol>
 
         <h2>Troubleshooting</h2>
         <p>If something doesn't work as expected:</p>
